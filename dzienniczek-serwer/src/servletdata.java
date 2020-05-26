@@ -44,8 +44,10 @@ public class servletdata extends HttpServlet {
 		  String line = null;
 		  try {
 		    BufferedReader reader = request.getReader();
+		    // odczyt z andoirda co przyszlo
 		    while ((line = reader.readLine()) != null) {
 		    	System.out.println(line);
+		    	// wpisanie tego do JSONa
 		    	final JSONObject obj =  new JSONObject(line.substring(9));
 				System.out.println(line);
 				String log = (String)obj.getString("login");

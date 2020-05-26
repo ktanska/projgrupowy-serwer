@@ -14,6 +14,7 @@ public class db_connector {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		// zmienic sciezke na wlasna
 		String url = "jdbc:sqlite:C:\\Users\\kinga\\git\\repository2\\dzienniczek-serwer\\child-health.db";
 		try {
 			conn = DriverManager.getConnection(url);
@@ -28,10 +29,13 @@ public class db_connector {
 
 	public boolean logowanie(String log, String pass) throws SQLException {
 		// TODO Auto-generated method stub
+		// zapytanie sql
 		String query = "SELECT * from Rodzic";
+		// polaczenie 
 		Connection conn = conn();
 		Statement st = conn.createStatement();
 
+		//wykonanie sql
 	      ResultSet rs = st.executeQuery(query);
 	     
 	      try {
@@ -51,7 +55,7 @@ public class db_connector {
 			    	conn.close();
 			    	return false;
 			    }
-			  } while (rs.next());
+			  } while (rs.next()); // sprawdzi wszystkie wyniki
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
