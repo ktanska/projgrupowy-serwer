@@ -16,7 +16,8 @@ public class db_connector {
 			e1.printStackTrace();
 		}
 		// zmienic sciezke na wlasna
-		String url = "jdbc:sqlite:C:\\Users\\Lucek\\git\\projgrupowy-serwer\\dzienniczek-serwer\\child-health.db";
+		//String url = "jdbc:sqlite:C:\\Users\\Lucek\\git\\projgrupowy-serwer\\dzienniczek-serwer\\child-health.db";
+		String url = "jdbc:sqlite:C:\\Users\\kinga\\git\\repository2\\dzienniczek-serwer\\child-health.db";
 		try {
 			conn = DriverManager.getConnection(url);
 		} catch (SQLException e) {
@@ -84,6 +85,29 @@ public class db_connector {
 		}
 	    conn.close();
 		return false;
+	}
+
+	public void new_child(String log, String pass, String imie_dziecka, String nazw_dziecka, String pesel, String waga, String wzrost, String data_ur) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection conn = conn();
+		Statement st = conn.createStatement();
+		String query = "SELECT PK FROM Rodzic WHERE login LIKE '"+log+"' AND password LIKE '"+pass+"'";
+	    ResultSet rs = st.executeQuery(query);
+	    String PK = rs.getString("PK");
+	    System.out.println("PK"+ PK);
+	    
+	
+	    String insert_child = "INSERT INTO Dziecko (data_ur, imie, nazwisko, PESEL, waga, wzrost, rodzic_klucz) VALUES (?,?,?,?,?,?,?)";
+	    PreparedStatement pstmt = conn.prepareStatement(insert_child);
+	    pstmt.setString(1, data_ur);
+	    pstmt.setString(2, imie_dziecka);
+	    pstmt.setString(3, nazw_dziecka);
+	    pstmt.setString(4, pesel);
+	    pstmt.setString(5, waga);
+	    pstmt.setString(5, wzrost);
+	    pstmt.setString(6, PK);
+	    pstmt.executeUpdate();
+		conn.close();
 	}
 	
 	}
