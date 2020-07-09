@@ -2,8 +2,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.json.JSONObject;
 
 public class db_connector {
 	
@@ -104,11 +107,38 @@ public class db_connector {
 	    pstmt.setString(3, nazw_dziecka);
 	    pstmt.setString(4, pesel);
 	    pstmt.setString(5, waga);
-	    pstmt.setString(5, wzrost);
-	    pstmt.setString(6, PK);
+	    pstmt.setString(6, wzrost);
+	    pstmt.setString(7, PK);
 	    pstmt.executeUpdate();
 		conn.close();
 	}
-	
+
+	public String get_child_list(String log, String pass) throws SQLException {
+		// TODO Auto-generated method stub
+		String child_list = "";
+		Connection conn = conn();
+		Statement st = conn.createStatement();
+		String query = "SELECT PK FROM Rodzic WHERE login LIKE '"+log+"' AND password LIKE '"+pass+"'";
+	    ResultSet rs = st.executeQuery(query);
+	    String PK = rs.getString("PK");
+	    System.out.println("PK"+ PK);
+	    String get_kids_query = "SELECT * FROM Dziecko WHERE rodzic_klucz LIKE '"+PK+"'";
+	    ResultSet kids_rs = st.executeQuery(get_kids_query);
+	    ResultSetMetaData rsmd = kids_rs.getMetaData();
+	    try {
+	    	while (kids_rs.next())
+			  {
+				JSONObject JS = new JSONObject();
+	    		JS.put("imie", rs.getString("imie"));
+	    		JS.put("nazwisko", rs.getString("nazwisko"));
+	    		child_list = child_list + JS.toString() + ",";
+			  }
+
+	} catch (SQLException e) {
+		e.printStackTrace();
 	}
+	    conn.close();
+	    return child_list;
+	}
+}
 		
